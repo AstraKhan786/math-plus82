@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Math Plus Quest</title>
+<style>
+:root{--bg:#f2f5fc;--card:#fff;--ink:#1f2540;--mute:#68708f;--line:#d7dcef;--acc:#5b5bd6;--ok:#2e9e5b;--bad:#d9534f;--gold:#f2a900;--wl:46%;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12142a;--card:#1c1f3d;--ink:#eef0ff;--mute:#9aa0c8;--line:#34386a;--acc:#8c8cff;--ok:#5fd08a;--bad:#ff8a80;--gold:#ffc53d;--wl:62%}}
+:root[data-theme="dark"]{--bg:#12142a;--card:#1c1f3d;--ink:#eef0ff;--mute:#9aa0c8;--line:#34386a;--acc:#8c8cff;--ok:#5fd08a;--bad:#ff8a80;--gold:#ffc53d;--wl:62%}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;padding-bottom:96px}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.hd{display:flex;gap:12px;align-items:center;padding:14px 16px;background:linear-gradient(135deg,var(--acc),hsl(285 65% 52%));color:#fff;border-radius:0 0 24px 24px}
+.av{font-size:34px;background:rgba(255,255,255,.2);width:54px;height:54px;border-radius:50%;display:grid;place-items:center}
+.hm{flex:1}.hm small,.pl small{opacity:.85}.pl{text-align:right}
+.bar{height:9px;border-radius:5px;background:rgba(127,127,160,.25);overflow:hidden;margin:3px 0}.bar i{display:block;height:100%;background:var(--gold);border-radius:5px}
+#wn{margin:8px 14px;padding:8px 12px;border-radius:10px;background:var(--bad);color:#fff}
+#app{max-width:760px;margin:auto;padding:14px}
+h2{font:700 24px/1.2 system-ui;margin:4px 0 8px}.mut,small{color:var(--mute)}
+.hero{background:var(--card);border-radius:20px;padding:16px;margin-bottom:14px;border:2px solid var(--gold)}.hero h2{margin:2px 0 10px}
+.w{background:var(--card);border-radius:20px;padding:14px;margin-bottom:14px;border-top:6px solid hsl(var(--h) 70% var(--wl))}
+.wh{display:flex;gap:10px;align-items:center;margin-bottom:10px}.wh>span{font-size:30px}.wh small{display:block}
+.nodes{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.nd{border:2px solid var(--line);border-bottom-width:5px;border-radius:16px;background:var(--bg);color:var(--ink);padding:10px;text-align:left;font:inherit;cursor:pointer}
+.nd:active,.big:active{transform:translateY(2px)}.nd b{display:block}.nd small{font-size:12px}
+.st{color:var(--gold);letter-spacing:2px;font-size:18px;display:block}
+.big{background:var(--acc);color:#fff;border:0;border-bottom:5px solid rgba(0,0,0,.25);border-radius:14px;padding:12px 24px;font:700 17px system-ui;cursor:pointer}
+.ghost{background:none;border:2px solid var(--line);color:var(--ink);border-radius:12px;padding:9px 14px;font:inherit;cursor:pointer}
+.ghost.on{background:var(--ink);color:var(--bg)}
+.qc,.c{background:var(--card);border-radius:20px;padding:16px;margin-bottom:12px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px}.row.sp{justify-content:space-between;margin-top:0}
+.q{font:600 24px/1.35 Georgia,serif;margin:14px 0}
+.dots{display:flex;gap:6px}.dots i{width:22px;height:8px;border-radius:4px;background:var(--line)}.dots i.d{background:var(--ok)}.dots i.c{background:var(--gold)}
+input[type=text],input[type=search],select,textarea{font:inherit;font-size:20px;padding:11px 14px;border:2px solid var(--line);border-radius:14px;background:var(--bg);color:var(--ink);width:100%;box-sizing:border-box}
+select{width:auto;font-size:16px}textarea{font-size:14px}
+.res{margin-top:12px;padding:12px;border-radius:14px;border-left:7px solid var(--ok);background:rgba(46,158,91,.13)}.res.x{border-color:var(--bad);background:rgba(217,83,79,.13)}.res ol{margin:6px 0 0;padding-left:22px}
+.tm{font:800 30px system-ui;color:var(--acc)}.q.big{font-size:34px;text-align:center}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}.ch{border:2px solid var(--line);border-radius:999px;padding:6px 12px;cursor:pointer}
+.seg{display:flex;gap:8px;margin-bottom:12px}
+.it{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-top:1px solid var(--line)}.it a{color:var(--acc);font-weight:700;text-decoration:none}
+.tag{font-size:11px;border:1px solid var(--acc);color:var(--acc);border-radius:6px;padding:0 5px;margin-left:6px}.sb{background:none;border:0;font-size:24px;color:var(--gold);cursor:pointer}
+.sl{display:grid;grid-template-columns:22px 1fr 44px;gap:8px;align-items:center}
+canvas{width:100%;height:auto;background:var(--card);border-radius:16px;display:block}
+#bn{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card);border-top:2px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));z-index:5}
+#bn button{flex:1;border:0;background:none;color:var(--mute);font:600 12px system-ui;padding:6px;border-radius:12px;cursor:pointer}#bn button span{display:block;font-size:22px}
+#bn button[aria-current=page]{color:var(--acc);background:color-mix(in srgb,var(--acc) 14%,transparent)}
+.pf{position:fixed;font-size:24px;pointer-events:none;z-index:9;animation:pf .9s ease-out forwards}
+@keyframes pf{to{transform:translate(var(--dx),var(--dy)) rotate(260deg);opacity:0}}
+@media (prefers-reduced-motion:reduce){.pf{display:none}*{transition:none!important}}
+</style>
+</head>
+<body>
+<div id="hd" class="hd"></div><div id="wn" role="alert" hidden></div>
+<main id="app"></main>
+<nav id="bn" aria-label="Main"></nav>
+<script>
+let rng=Math.random;const r=(a,b)=>a+Math.floor(rng()*(b-a+1)),pk=a=>a[r(0,a.length-1)],pk0=a=>a[Math.floor(Math.random()*a.length)];
+const mul32=a=>()=>{a|=0;a=a+0x6D2B79F5|0;let z=Math.imul(a^a>>>15,1|a);z=z+Math.imul(z^z>>>7,61|z)^z;return((z^z>>>14)>>>0)/4294967296};
+const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const gcd=(a,b)=>b?gcd(b,a%b):a;
+const t=(n,v)=>n?` ${n<0?"−":"+"} ${Math.abs(n)===1&&v?"":Math.abs(n)}${v}`:"";
+const C=(n,k)=>{let x=1;for(let i=1;i<=k;i++)x=x*(n-k+i)/i;return Math.round(x)};
+const TR=[[3,4,5],[5,12,13],[8,15,17],[7,24,25]];
+const T=[
+["pct","Percentages",0,"",d=>{const p=r(1,9)*5,N=r(2,8+4*d)*20,a=p*N/100;return[`What is ${p}% of ${N}?`,a,"Write the percentage as a fraction of 100, then multiply.",[`${p}% of ${N} = ${p}/100 × ${N}`,`= ${a}`]]}],
+["lin","Linear equations",2,"",d=>{const a=r(2,4+3*d),x=r(-9,9),b=r(-9,9),c=a*x+b;return[`Solve ${a}x${t(b,"")} = ${c}. Find x.`,x,"Move the constant to the right-hand side, then divide by the coefficient of x.",[`${a}x = ${c} − (${b}) = ${c-b}`,`x = ${c-b} ÷ ${a} = ${x}`]]}],
+["quad","Quadratic equations",2,"",d=>{const p=r(1,3+2*d),q=-r(1,3+2*d),B=-(p+q),K=p*q;return[`Find the larger root of x²${t(B,"x")}${t(K,"")} = 0.`,p,"Look for two numbers with sum b and product c, then factorize.",[`Two numbers with sum ${B} and product ${K}: ${-p} and ${-q}`,`(x − ${p})(x + ${-q}) = 0`,`x = ${p} or x = ${q}, so the larger root is ${p}`]]}],
+["rem","Remainder theorem",2,"G11 Ch 1",d=>{const a=r(1,2+d),b=r(-5,5),c=r(-6,6),e=r(-9,9),k=pk([-3,-2,-1,1,2,3]),f=a*k**3+b*k*k+c*k+e;return[`Find the remainder when f(x) = ${a}x³${t(b,"x²")}${t(c,"x")}${t(e,"")} is divided by (x ${k<0?"+":"−"} ${Math.abs(k)}).`,f,"Do not divide: substitute the root of the divisor into f.",[`By the Remainder Theorem, the remainder is f(${k})`,`f(${k}) = ${a}(${k})³ + (${b})(${k})² + (${c})(${k}) + (${e})`,`= ${f}`]]}],
+["tan","Circle tangents",3,"G11 Ch 7",d=>{const[x,y,z]=pk(TR),k=r(1,d+1);return[`P is ${z*k} cm from the centre O of a circle of radius ${x*k} cm. Find the length of a tangent segment from P to the circle.`,y*k,"The radius meets a tangent at 90°. Use Pythagoras.",[`Radius ⟂ tangent, so ∠OAP = 90°  (Theorem 7.2)`,`OP² = OA² + PA²`,`PA² = ${z*k}² − ${x*k}² = ${(z*z-x*x)*k*k}`,`PA = ${y*k}`]]}],
+["ap","Arithmetic progressions",4,"G11 Ch 4",d=>{const a=r(1,9),m=r(2,6),n=r(6,10+3*d),S=n*(2*a+(n-1)*m)/2;return[`An A.P. has first term ${a} and common difference ${m}. Find the sum of its first ${n} terms.`,S,"Use S = n/2 { 2a + (n − 1)d }.",[`S_n = n/2 {2a + (n − 1)d}`,`S_${n} = ${n}/2 {2(${a}) + (${n-1})(${m})}`,`= ${S}`]]}],
+["gp","Geometric series",4,"G11 Ch 4",d=>{const m=r(2,4+d),a=(m-1)*r(1,5),S=a*m/(m-1);return[`A G.P. has first term ${a} and common ratio 1/${m}. Find the sum to infinity.`,S,"Check |r| < 1, then use S = a/(1 − r).",[`|r| = 1/${m} < 1, so the sum to infinity exists`,`S∞ = a/(1 − r) = ${a}/(1 − 1/${m}) = ${a}/(${m-1}/${m})`,`= ${S}`]]}],
+["det","Matrices (determinant)",4,"G11 Ch 5",d=>{const a=r(-4,5+d),b=r(-5,5),c=r(-5,5),e=r(-4,5+d),D=a*e-b*c;return[`Find det A for A = ( ${a}  ${b} ; ${c}  ${e} ), written row by row.`,D,"det = (top-left × bottom-right) − (top-right × bottom-left).",[`det A = ad − bc`,`= (${a})(${e}) − (${b})(${c})`,`= ${D}`]]}],
+["vec","Vectors (magnitude)",4,"G11 Ch 9",d=>{const[x,y,z]=pk(TR),k=r(1,d),sx=pk([-1,1]),sy=pk([-1,1]),x1=r(-4,4),y1=r(-4,4),dx=sx*x*k,dy=sy*y*k;return[`Given A(${x1}, ${y1}) and B(${x1+dx}, ${y1+dy}), find |AB|.`,z*k,"Find AB = OB − OA first, then its length.",[`AB = OB − OA = (${dx}, ${dy})`,`|AB| = √(${dx}² + ${dy}²) = √${dx*dx+dy*dy}`,`= ${z*k}`]]}],
+["stat","Statistics (variance)",4,"G11 Ch 6",d=>{let v;do{v=[r(-2-d,2+d),r(-2-d,2+d),r(-2-d,2+d),r(-2-d,2+d)];v.push(-v.reduce((a,b)=>a+b))}while(Math.abs(v[4])>4+d);const m=r(8,20),ss=v.reduce((a,b)=>a+b*b,0);return[`Find the variance of ${v.map(x=>x+m).join(", ")} (to 2 decimal places).`,+(ss/5).toFixed(2),"Find the mean, then average the squared deviations.",[`Mean = ${m}`,`Deviations: ${v.join(", ")}`,`σ² = Σ(x − x̄)² / n = ${ss}/5 = ${(ss/5).toFixed(2)}`]]}],
+["binom","Binomial theorem",4,"G11 Ch 2",d=>{const n=r(4,5+d),k=r(2,3),a=r(1,3),c=C(n,k);return[`Find the coefficient of x${k===2?"²":"³"} in the expansion of (1 + ${a}x)^${n}.`,c*a**k,"General term: nCr · (ax)^r.",[`T(r+1) = ${n}C${k} (${a}x)^${k}`,`${n}C${k} = ${c}`,`Coefficient = ${c} × ${a}^${k} = ${c*a**k}`]]}],
+["der","Derivatives",5,"G11 Ch 11",d=>{const a=r(1,3),b=r(-4,4),c=r(-5,5),k=r(-2,3),v=3*a*k*k+2*b*k+c;return[`If f(x) = ${a}x³${t(b,"x²")}${t(c,"x")}, find f′(${k}).`,v,"Differentiate term by term: d/dx xⁿ = nxⁿ⁻¹.",[`f′(x) = ${3*a}x²${t(2*b,"x")}${t(c,"")}`,`f′(${k}) = ${3*a}(${k})² + (${2*b})(${k}) + (${c}) = ${v}`]]}]];
+
+T.push(
+["add","Addition & subtraction",0,"",d=>{const a=r(10**d,10**(d+1)-1),b=r(10**(d-1),10**d-1),s=pk([1,-1]),v=a+s*b;return[`${a} ${s>0?"+":"−"} ${b} = ?`,v,"Line the digits up and work from the right.",[`${a} ${s>0?"+":"−"} ${b}`,`= ${v}`]]}],
+["mul","Multiplication",1,"",d=>{const a=r(2,8+4*d),b=r(2,9+d),v=a*b;return[`${a} × ${b} = ?`,v,"Break one number into tens and ones.",[`${a} × ${b}`,`= ${v}`]]}],
+["ord","Order of operations",1,"",d=>{const a=r(2,9),b=r(2,9),c=r(2,9),e=r(1,9);return d===1?[`${a} + ${b} × ${c} − ${e} = ?`,a+b*c-e,"Multiply before you add or subtract.",[`Multiply first: ${b} × ${c} = ${b*c}`,`${a} + ${b*c} − ${e}`,`= ${a+b*c-e}`]]:[`(${a} + ${b}) × ${c} − ${e} = ?`,(a+b)*c-e,"Brackets first, then multiply.",[`Brackets: ${a} + ${b} = ${a+b}`,`${a+b} × ${c} = ${(a+b)*c}`,`${(a+b)*c} − ${e} = ${(a+b)*c-e}`]]}],
+["pow","Powers & roots",3,"",d=>{const k=r(2,9+3*d),n=r(2,5+d),v=k+n*n;return[`√${k*k} + ${n}² = ?`,v,"Evaluate the root and the square separately.",[`√${k*k} = ${k}`,`${n}² = ${n*n}`,`${k} + ${n*n} = ${v}`]]}],
+["frac","Adding fractions",4,"",d=>{const b=pk([2,3,4,5,6]),e=pk([2,3,4,5,6,8]),a=r(1,b-1),c=r(1,e-1),n=a*e+c*b,m=b*e,g=gcd(n,m);return[`${a}/${b} + ${c}/${e} = ?  (answer as a fraction, e.g. 7/12)`,n/m,"Make the denominators the same first.",[`Common denominator: ${m}`,`${a*e}/${m} + ${c*b}/${m} = ${n}/${m}`,`Simplify: ${n/g}/${m/g}`],`${n/g}/${m/g}`]}],
+["log","Logarithms",3,"",d=>{const b=pk([2,3,5,10]),k=r(2,3+d);return[`log base ${b} of ${b**k} = ?`,k,"Ask: what power of the base gives this number?",[`${b}^? = ${b**k}`,`${b}^${k} = ${b**k}`,`So the logarithm is ${k}`]]}],
+["cx","Complex numbers",5,"",d=>{const a=r(-4,5),b=r(-4,5),c=r(-4,5),e=r(-4,5),v=a*c-b*e;return[`Find the real part of (${a}${t(b,"i")})(${c}${t(e,"i")}).`,v,"Expand, and remember i² = −1.",[`(a + bi)(c + di) = (ac − bd) + (ad + bc)i`,`Real part = (${a})(${c}) − (${b})(${e})`,`= ${v}`]]}],
+["lim","Limits",5,"",d=>{const k=r(1,6)*pk([-1,1]),u=`x ${k<0?"+":"−"} ${Math.abs(k)}`,w=`x ${k<0?"−":"+"} ${Math.abs(k)}`;return[`Find the limit as x→${k} of (x² − ${k*k}) / (${u}).`,2*k,"Factor the numerator, then cancel.",[`x² − ${k*k} = (${u})(${w})`,`Cancel (${u}): the expression becomes ${w}`,`At x = ${k}: ${k} ${k<0?"−":"+"} ${Math.abs(k)} = ${2*k}`]]}]);
+const TM=Object.fromEntries(T.map(x=>[x[0],x]));
+
+function gen(id,d,seed){rng=mul32(seed);try{const[q,ans,hint,steps,show]=TM[id][4](d);return{id,q,ans,hint,steps,show,d,seed}}finally{rng=Math.random}}
+const DEP=["Complete platforms","Visualization","Solvers & calculators","Textbooks & libraries","Problems & contests","Video","AI tutors","Programming","Reference","Practice & organization"];
+const L=`A|Khan Academy*|khanacademy.org/math|Structured lessons and mastery tracking
+A|CK-12|ck12.org|Free textbooks, Flexi AI tutor
+A|Brilliant|brilliant.org|Interactive problem-based learning
+A|IXL Math|ixl.com/math|Diagnostics and adaptive skill practice
+A|Mathigon|mathigon.org|Interactive textbooks
+A|Mathplanet|mathplanet.com|High-school courses
+A|Art of Problem Solving|artofproblemsolving.com|Competition problem solving
+A|Schoolhouse.world|schoolhouse.world|Free peer tutoring
+B|Desmos*|desmos.com|Graphing and activities
+B|GeoGebra*|geogebra.org|Dynamic geometry, 3D, calculus
+B|PhET|phet.colorado.edu|Interactive simulations
+B|Mathigon Polypad|mathigon.org/polypad|Digital manipulatives
+B|Wolfram Alpha*|wolframalpha.com|Computation and answer checking
+B|Wolfram Mathematica|wolfram.com/mathematica|Advanced symbolic math
+B|Math3D|math3d.org|3D visualization
+B|Desmos 3D|desmos.com/3d|3D graphing
+C|Symbolab|symbolab.com|Step-by-step algebra and calculus
+C|Mathway|mathway.com|Broad problem solving
+C|Photomath|photomath.com|Scan a problem, see steps
+C|Microsoft Math Solver|mathsolver.microsoft.com|Explanations and solving
+C|Derivative Calculator|derivative-calculator.net|Differentiation steps
+C|Integral Calculator|integral-calculator.com|Integration steps
+C|Matrix Calculator|matrixcalc.org|Matrix operations
+C|Calculator.net|calculator.net|General calculators
+D|OpenStax|openstax.org|Free textbooks, pre-algebra to calculus
+D|MIT OpenCourseWare|ocw.mit.edu|University courses
+D|Mathematics LibreTexts|math.libretexts.org|Open textbooks
+D|AIM Open Textbooks|aimath.org/textbooks|Reviewed open textbooks
+D|Open Textbook Library|open.umn.edu/opentextbooks|Open-access books
+D|Project Gutenberg|gutenberg.org|Public-domain math books
+E|Alcumus|artofproblemsolving.com/alcumus|Adaptive problem solving
+E|NRICH|nrich.maths.org|Reasoning and exploration
+E|CEMC|cemc.uwaterloo.ca|Contests and learning materials
+E|Project Euler|projecteuler.net|Math and coding challenges
+E|Brilliant problems|brilliant.org|Interactive problem solving
+E|International Math Olympiad|imo-official.org|Olympiad problems
+E|MATHCOUNTS|mathcounts.org|Competition resources
+F|3Blue1Brown*|3blue1brown.com|Deep visual intuition
+F|The Organic Chemistry Tutor|-|Step-by-step instruction
+F|Professor Leonard|-|Detailed lectures
+F|patrickJMT|-|Worked examples
+F|Eddie Woo|-|School maths explanations
+F|Math Antics|mathantics.com|Foundational concepts
+G|ChatGPT*|chatgpt.com|Socratic tutoring, custom questions
+G|Google Gemini|gemini.google.com|Multimodal explanations
+G|Claude|claude.ai|Reasoning and explanations
+G|Khanmigo|khanmigo.ai|Guided tutoring
+G|CK-12 Flexi|ck12.org|AI-assisted school learning
+H|Python|python.org|Mathematical programming
+H|Google Colab|colab.research.google.com|Browser notebooks
+H|Jupyter|jupyter.org|Interactive notebooks
+H|SymPy|sympy.org|Symbolic math in Python
+H|NumPy|numpy.org|Numerical math
+H|GNU Octave|octave.org|Numerical computation
+H|SageMath|sagemath.org|Open-source advanced math
+I|Wolfram MathWorld|mathworld.wolfram.com|Mathematical encyclopedia
+I|Encyclopedia of Mathematics|encyclopediaofmath.org|Advanced reference
+I|OEIS|oeis.org|Integer sequences
+I|MathOverflow|mathoverflow.net|Research-level questions
+I|Math Stack Exchange|math.stackexchange.com|Questions and answers
+J|Quizlet|quizlet.com|Terminology flashcards
+J|Anki|apps.ankiweb.net|Spaced repetition
+J|Notion|notion.so|Learning records and planning
+J|Xmind|xmind.app|Mind maps
+J|Overleaf|overleaf.com|Writing math in LaTeX`.split("\n").map(s=>s.split("|"));
+
+const W=[["📘","Myanmar Grade 11","Your track · textbook chapters",12,["rem","binom","ap","gp","det","stat","tan","vec","der"]],["🌱","Number Garden","Grades 1–3",140,["add","mul","ord"]],["⛰️","Peaks of Percent & Power","Grades 3–6",200,["pct","pow","frac"]],["🌊","Equation Shores","Grades 6–10",262,["lin","quad","log"]],["🚀","College Orbit","Calculus and beyond",320,["lim","cx"]]];
+const RK=[[0,"Rookie","🌱"],[200,"Explorer","🧭"],[600,"Solver","🧩"],[1200,"Strategist","♟️"],[2400,"Master","🏆"],[4000,"Mathematician","👑"]],GOAL=50,COACH=["Nice!","Sharp!","Exactly!","You’re on fire!","Clean work!"];
+// ---- state ----
+const KEY="mathplus3",fresh=()=>({xp:0,skill:{},stars:{},cards:[],stack:{},streak:{n:0,last:""},day:{d:"",xp:0},best:{speed:0}}),cl=(x,lo,hi)=>Number.isFinite(+x)?Math.min(hi,Math.max(lo,+x)):lo;
+function norm(o){const s=fresh();if(!o||typeof o!=="object"||Array.isArray(o))return s;for(const k of Object.keys(TM)){if(o.skill&&k in o.skill)s.skill[k]=cl(o.skill[k],0,100);if(o.stars&&k in o.stars)s.stars[k]=Math.round(cl(o.stars[k],0,3))}
+s.xp=Math.round(cl(o.xp,0,1e7));s.cards=(Array.isArray(o.cards)?o.cards:[]).filter(c=>c&&TM[c.id]&&typeof c.q==="string"&&Array.isArray(c.s)&&Number.isFinite(+c.a)).slice(-200).map(c=>({id:c.id,q:c.q,a:+c.a,s:c.s.map(String),show:c.show?String(c.show):undefined,due:cl(c.due,0,8.64e15),box:Math.round(cl(c.box,0,5))}));
+for(const k in(o.stack||{}))if(o.stack[k]===true)s.stack[k]=true;const st=o.streak;if(st&&typeof st==="object"){s.streak={n:Math.round(cl(st.n,0,1e5)),last:String(st.last||"").slice(0,10)}}
+if(o.day&&typeof o.day==="object")s.day={d:String(o.day.d||"").slice(0,10),xp:Math.round(cl(o.day.xp,0,1e6))};s.best.speed=Math.round(cl(o.best&&o.best.speed,0,1e4));return s}
+let S;try{const raw=localStorage.getItem(KEY)||localStorage.getItem("mathplus1");S=norm(raw?JSON.parse(raw):null)}catch(e){try{localStorage.setItem(KEY+".bak",localStorage.getItem(KEY)||"")}catch(_){}S=fresh()}
+const showWarn=m=>{const w=$("#wn");w.textContent=m;w.hidden=!m},save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S));showWarn("");return true}catch(e){showWarn("Couldn’t save in this browser. Use More → Data to export a backup.");return false}};
+const sk=id=>S.skill[id]||0,diff=s=>1+Math.min(2,Math.floor(s/34)),today=()=>new Date().toLocaleDateString("en-CA"),rank=()=>{let k=RK[0];for(const x of RK)if(S.xp>=x[0])k=x;return k};
+function addXP(n){const t=today();if(S.day.d!==t)S.day={d:t,xp:0};if(S.day.xp===0&&S.streak.last!==t){const y=new Date(Date.now()-864e5).toLocaleDateString("en-CA");S.streak={n:S.streak.last===y?S.streak.n+1:1,last:t}}S.xp+=n;S.day.xp+=n;save();hdr()}
+function hdr(){const[mn,nm,ic]=rank(),nx=RK.find(x=>x[0]>S.xp),pc=nx?(S.xp-mn)/(nx[0]-mn)*100:100,td=S.day.d===today()?S.day.xp:0;$("#hd").innerHTML=`<div class="av" aria-hidden="true">${ic}</div><div class="hm"><b>${nm}</b><div class="bar"><i style="width:${pc}%"></i></div><small>${S.xp} XP${nx?` · ${nx[0]-S.xp} to ${nx[1]}`:""}</small></div><div class="pl"><b>🔥 ${S.streak.last===today()||S.streak.last===new Date(Date.now()-864e5).toLocaleDateString("en-CA")?S.streak.n:0}</b><br><small>${td}/${GOAL} XP today</small></div>`}
+// ---- answers, coach, effects ----
+const parseAns=s=>{s=String(s).trim().replace(/−/g,"-");if(!/^-?(\d+\.?\d*|\.\d+)(\/-?\d+\.?\d*)?$/.test(s))return NaN;if(s.includes("/")){const[a,b]=s.split("/");return+b===0?NaN:+a/+b}return+s},same=(v,a)=>Number.isFinite(v)&&Math.abs(v-a)<=(Number.isInteger(a)?1e-6:.0051);
+function pop(){if(window.matchMedia&&matchMedia("(prefers-reduced-motion:reduce)").matches)return;for(let i=0;i<12;i++){const s=document.createElement("span");s.className="pf";s.textContent=pk0(["⭐","✨","🎉","💥"]);s.style.cssText=`left:50%;top:40%;--dx:${(Math.random()-.5)*300}px;--dy:${-80-Math.random()*200}px`;document.body.appendChild(s);setTimeout(()=>s.remove(),1000)}}
+function record(q,ok){S.skill[q.id]=cl(sk(q.id)+(ok?(q.h?5:10):-6),0,100);if(!ok&&!S.cards.some(c=>c.q===q.q))S.cards=[...S.cards,{id:q.id,q:q.q,a:q.ans,s:q.steps,show:q.show,due:Date.now()+864e5,box:0}].slice(-200);save()}
+const stepsHTML=a=>`<ol>${a.map(s=>`<li>${esc(s)}</li>`).join("")}</ol>`;
+// ---- navigation ----
+const app=$("#app");let V="quest",ACT={},SUB="plot",TIMER=null,TS={sel:new Set(W[0][4]),n:10};
+const GL={go(e){lesson(e.dataset.id)},sub(e){SUB=e.dataset.s;render()}};
+app.addEventListener("click",e=>{const a=e.target.closest("[data-a]");if(!a)return;const f=ACT[a.dataset.a]||GL[a.dataset.a];if(f)f(a)});
+document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.id==="ans"&&ACT.enter){e.preventDefault();ACT.enter()}});
+[["quest","🗺️","Quest"],["speed","⚡","Speed"],["test","📝","Test"],["review","🔁","Review"],["more","⋯","More"]].forEach(([k,i,n])=>{const b=document.createElement("button");b.dataset.v=k;b.innerHTML=`<span aria-hidden="true">${i}</span>${n}`;b.onclick=()=>go(k);$("#bn").appendChild(b)});
+function go(v){clearInterval(TIMER);ACT={};V=v||V;[...$("#bn").children].forEach(b=>b.dataset.v===V?b.setAttribute("aria-current","page"):b.removeAttribute("aria-current"));render()}
+function render(){({quest,speed:speedStart,test:testView,review,more})[V]();hdr()}
+// ---- quest ----
+function nextUp(){for(const w of W)for(const id of w[4])if((S.stars[id]||0)<3)return id;return Object.keys(TM).sort((a,b)=>sk(a)-sk(b))[0]}
+function quest(){const n=nextUp();app.innerHTML=`<div class="hero"><small>Next up</small><h2>${TM[n][1]}</h2><button class="big" data-a="go" data-id="${n}">Start ▶</button></div>`+W.map(w=>`<section class="w" style="--h:${w[3]}"><div class="wh"><span aria-hidden="true">${w[0]}</span><div><b>${w[1]}</b><small>${w[2]}</small></div></div><div class="nodes">${w[4].map(id=>{const s=S.stars[id]||0;return`<button class="nd" data-a="go" data-id="${id}" aria-label="${TM[id][1]}, ${s} of 3 stars"><span class="st" aria-hidden="true">${"★".repeat(s)}${"☆".repeat(3-s)}</span><b>${TM[id][1]}</b><small>${TM[id][3]||"Practice"}</small></button>`}).join("")}</div></section>`).join("")}
+// ---- quiz engine (lessons and tests) ----
+function quiz(o){const s={i:0,ok:0,miss:[],q:null,fb:""};
+const ask=()=>{const id=Array.isArray(o.ids)?pk0(o.ids):o.ids;s.q={...gen(id,diff(sk(id)),Math.random()*2**32>>>0),h:false};s.fb="";draw()};
+function draw(){const q=s.q;app.innerHTML=`<div class="qc"><div class="row sp"><button class="ghost" data-a="quit" aria-label="Quit">✕</button><div class="dots" aria-label="Question ${s.i+1} of ${o.n}">${Array.from({length:o.n},(_,i)=>`<i class="${i<s.i?"d":i===s.i?"c":""}"></i>`).join("")}</div><small>${TM[q.id][1]}</small></div><p class="q">${esc(q.q)}</p>`+(s.fb?s.fb:`<input id="ans" type="text" inputmode="decimal" aria-label="Your answer" placeholder="Type your answer" autocomplete="off"><div class="row"><button class="big" data-a="check">Check</button>${o.hints?`<button class="ghost" data-a="hint">Hint</button>`:""}</div><div id="hn" aria-live="polite" class="mut"></div>`)+`</div>`;(s.fb?$("[data-a=next]"):$("#ans")).focus()}
+ACT={quit(){go()},hint(){s.q.h=true;$("#hn").textContent="Hint: "+s.q.hint},
+check(){const v=parseAns($("#ans").value);if(isNaN(v)){$("#hn").textContent="Enter a number, or a fraction like 5/2.";return}const q=s.q,ok=same(v,q.ans);record(q,ok);addXP(ok?(o.fb?(q.h?10:15):5):0);if(ok)s.ok++;else s.miss.push(q);
+if(o.fb){s.fb=`<div class="res${ok?"":" x"}" role="status"><b>${ok?pk0(COACH):"Not yet. The answer is "+esc(q.show||q.ans)}</b>${stepsHTML(q.steps)}</div><div class="row"><button class="big" data-a="next">Continue</button></div>`;draw();if(ok)pop()}else ACT.next()},
+next(){s.i++;s.i>=o.n?o.done(s):ask()}};ACT.enter=()=>s.fb?ACT.next():ACT.check();ask()}
+function lesson(id){clearInterval(TIMER);const n=5;quiz({ids:id,n,hints:true,fb:true,done(s){const st=s.ok>=5?3:s.ok>=4?2:s.ok>=3?1:0,bonus=st*10;S.stars[id]=Math.max(S.stars[id]||0,st);addXP(bonus);if(st===3)pop();
+app.innerHTML=`<div class="qc"><h2>${TM[id][1]}</h2><div class="st" style="font-size:44px;text-align:center" aria-label="${st} of 3 stars">${"★".repeat(st)}${"☆".repeat(3-st)}</div><p class="q" style="text-align:center">${s.ok}/${n} correct · +${bonus} bonus XP</p><p class="mut" style="text-align:center">${st===3?"Perfect. That topic is yours.":st?"Good. Three stars needs all five right.":"Not yet. Missed questions are saved in Review."}</p><div class="row" style="justify-content:center"><button class="big" data-a="again">Again</button><button class="ghost" data-a="quit">Back to Quest</button></div></div>`;ACT={again(){lesson(id)},quit(){go("quest")}}}})}
+// ---- speed (mental math) ----
+function speedStart(){app.innerHTML=`<div class="qc"><h2>⚡ Speed round</h2><p>60 seconds of mental math: addition, multiplication, order of operations, powers and percentages. It gets harder as you score.</p><p class="mut">Best: ${S.best.speed}</p><button class="big" data-a="s60">Start 60s</button></div>`;ACT={s60:speedRun}}
+function speedRun(){const ids=["add","mul","ord","pow","pct"];let t=60,sc=0,cb=0,q;const nq=()=>{q=gen(pk0(ids),1+(sc>8)+(sc>16),Math.random()*2**32>>>0);app.innerHTML=`<div class="qc"><div class="row sp"><button class="ghost" data-a="quit" aria-label="Quit">✕</button><b class="tm" id="tm">${t}s</b><b>⚡ ${sc}${cb>2?` · x${cb}`:""}</b></div><p class="q big">${esc(q.q)}</p><input id="ans" type="text" inputmode="decimal" aria-label="Your answer" autocomplete="off"><div class="row"><button class="big" data-a="check">OK</button></div></div>`;$("#ans").focus()};
+const sub=()=>{const v=parseAns($("#ans").value);if(isNaN(v))return;if(same(v,q.ans)){sc++;cb++}else cb=0;nq()};
+const end=()=>{clearInterval(TIMER);const nb=sc>S.best.speed;if(nb)S.best.speed=sc;addXP(sc*2);if(nb&&sc>0)pop();app.innerHTML=`<div class="qc"><h2>Time!</h2><p class="q" style="text-align:center">${sc} correct · +${sc*2} XP</p><p class="mut" style="text-align:center">${nb&&sc?"New best!":"Best: "+S.best.speed}</p><div class="row" style="justify-content:center"><button class="big" data-a="again">Again</button></div></div>`;ACT={again:speedRun}};
+ACT={check:sub,enter:sub,quit(){go("speed")}};nq();TIMER=setInterval(()=>{t--;const e=$("#tm");if(e)e.textContent=t+"s";if(t<=0)end()},1000)}
+// ---- test builder ----
+function testView(){app.innerHTML=`<h2>📝 Build a test</h2><p class="mut">Pick topics and a length. No hints and no feedback until the end, like an exam.</p>`+W.map(w=>`<div class="c"><b>${w[0]} ${w[1]}</b><div class="chips">${w[4].map(id=>`<label class="ch"><input type="checkbox" data-id="${id}"${TS.sel.has(id)?" checked":""}> ${TM[id][1]}</label>`).join("")}</div></div>`).join("")+`<div class="row"><label>Questions <select id="tn">${[5,10,15,20].map(n=>`<option${n===TS.n?" selected":""}>${n}</option>`).join("")}</select></label><button class="big" data-a="tstart">Start test</button></div><p id="tmsg" class="mut" role="status"></p>`;
+ACT={tstart(){if(!TS.sel.size){$("#tmsg").textContent="Choose at least one topic.";return}const n=TS.n;quiz({ids:[...TS.sel],n,hints:false,fb:false,done(s){app.innerHTML=`<div class="qc"><h2>${s.ok}/${n} · ${Math.round(s.ok/n*100)}%</h2><p class="mut">+${s.ok*5} XP. Wrong answers were added to Review.</p>${s.miss.map(q=>`<div class="res x"><b>${esc(q.q)}</b><div>Answer: ${esc(q.show||q.ans)}</div>${stepsHTML(q.steps)}</div>`).join("")||`<div class="res"><b>Flawless.</b></div>`}<div class="row"><button class="big" data-a="again">New test</button></div></div>`;ACT={again(){go("test")}}}})}}}
+app.addEventListener("change",e=>{const t=e.target;if(t.matches(".ch input")){t.checked?TS.sel.add(t.dataset.id):TS.sel.delete(t.dataset.id)}else if(t.id==="tn")TS.n=+t.value});
+// ---- review (spaced repetition) ----
+function review(){const due=S.cards.filter(c=>c.due<=Date.now()).sort((a,b)=>a.due-b.due),c=due[0];app.innerHTML=`<div class="qc"><div class="row sp"><h2>🔁 Review</h2><small>${due.length} due · ${S.cards.length} saved</small></div><p class="mut">Missed questions return after 1, 2, 4, 8, 16, then 32 days as you get them right.</p>`+(c?`<p class="q">${esc(c.q)}</p><input id="ans" type="text" inputmode="decimal" aria-label="Your answer" autocomplete="off"><div class="row"><button class="big" data-a="rk">Check</button></div><div id="rr" aria-live="polite"></div>`:`<p class="q">${S.cards.length?"Nothing due. Come back later.":"No cards yet. Missed questions appear here."}</p>`)+`</div>`;
+if(c){let shown=false;ACT={rk(){if(shown){render();return}const v=parseAns($("#ans").value);if(isNaN(v))return;const ok=same(v,c.a);c.box=ok?Math.min(5,c.box+1):0;c.due=Date.now()+[1,2,4,8,16,32][c.box]*864e5;save();shown=true;$("#rr").innerHTML=`<div class="res${ok?"":" x"}"><b>${ok?pk0(COACH):"Answer: "+esc(c.show||c.a)}</b>${stepsHTML(c.s)}</div>`;$("[data-a=rk]").textContent="Next";if(ok)pop()}};ACT.enter=ACT.rk;$("#ans").focus()}}
+// ---- more: plot, library, data ----
+const PL={fx:"a*x^2+b*x+c",a:1,b:0,c:-2,zr:10,dv:false,xv:"2"};
+function more(){app.innerHTML=`<div class="seg">${[["plot","Plot"],["lib","Library"],["data","Data"]].map(([k,n])=>`<button class="ghost${SUB===k?" on":""}" data-a="sub" data-s="${k}">${n}</button>`).join("")}</div><div id="sv"></div>`;({plot:plotView,lib:libView,data:dataView})[SUB]()}
+function compile(src){const FN={sin:Math.sin,cos:Math.cos,tan:Math.tan,sqrt:Math.sqrt,abs:Math.abs,exp:Math.exp,ln:Math.log,log:Math.log10},CN={pi:Math.PI,e:Math.E},VR=["x","a","b","c"],has=(o,k)=>Object.prototype.hasOwnProperty.call(o,k),tk=[],re=/\s*(?:(\d+\.?\d*|\.\d+)|([a-z]+)|([-+*\/^()]))/iy;let m,i=0;
+while(src.slice(re.lastIndex).trim()){m=re.exec(src);if(!m)throw new Error("Unsupported character");if(m[1]!==undefined)tk.push({n:+m[1]});else if(m[3])tk.push({o:m[3]});else{const w=m[2].toLowerCase();if(has(FN,w)||has(CN,w)||VR.includes(w))tk.push({w});else if([...w].every(ch=>VR.includes(ch)))[...w].forEach(ch=>tk.push({w:ch}));else throw new Error("Unknown name: "+m[2])}}
+const pe=()=>tk[i],isO=o=>pe()&&pe().o===o,atomStart=k=>k&&(k.n!==undefined||k.w!==undefined||k.o==="("),close=()=>{if(!isO(")"))throw new Error("Missing )");i++};
+function expr(){let l=term();while(isO("+")||isO("-")){const o=tk[i++].o,rr=term(),a=l;l=o==="+"?v=>a(v)+rr(v):v=>a(v)-rr(v)}return l}
+function term(){let l=unary();for(;;){const k=pe();let o;if(isO("*")||isO("/"))o=tk[i++].o;else if(atomStart(k))o="*";else break;const rr=unary(),a=l;l=o==="/"?v=>a(v)/rr(v):v=>a(v)*rr(v)}return l}
+function unary(){if(isO("-")){i++;const f=unary();return v=>-f(v)}if(isO("+")){i++;return unary()}return power()}
+function power(){const b=atom();if(isO("^")){i++;const e=unary();return v=>Math.pow(b(v),e(v))}return b}
+function atom(){const k=tk[i++];if(!k)throw new Error("Unexpected end");if(k.n!==undefined)return()=>k.n;if(k.o==="("){const f=expr();close();return f}
+if(k.w!==undefined){if(has(FN,k.w)){if(!isO("("))throw new Error(k.w+" needs ( )");i++;const f=expr();close();const g=FN[k.w];return v=>g(f(v))}if(has(CN,k.w)){const c=CN[k.w];return()=>c}return v=>v[k.w]}throw new Error("Unexpected "+k.o)}
+const f=expr();if(i<tk.length)throw new Error("Unexpected input");return(x,a=0,b=0,c=0)=>f({x,a,b,c})}
+function segments(F,R,Wd,Ry){const out=[];let cur=[],py=null;for(let p=0;p<=Wd;p+=2){const y=F(-R+2*R*p/Wd),ok=Number.isFinite(y)&&Math.abs(y)<=1e4;if(!ok||(py!==null&&Math.abs(y-py)>Ry*2)){if(cur.length>1)out.push(cur);cur=[]}if(ok){cur.push([p,y]);py=y}else py=null}if(cur.length>1)out.push(cur);return out}
+function plotView(){$("#sv").innerHTML=`<div class="c"><label class="mut" for="fx">f(x): use * or implicit multiply (2x), ^ for powers. a, b, c are sliders. sin cos tan sqrt abs exp ln log pi e</label><input type="text" id="fx" value="${esc(PL.fx)}" spellcheck="false" autocomplete="off"><div class="sl"><span>a</span><input type="range" id="a" aria-label="Slider a" min="-5" max="5" step=".1" value="${PL.a}"><b id="av"></b></div><div class="sl"><span>b</span><input type="range" id="b" aria-label="Slider b" min="-5" max="5" step=".1" value="${PL.b}"><b id="bv"></b></div><div class="sl"><span>c</span><input type="range" id="c" aria-label="Slider c" min="-5" max="5" step=".1" value="${PL.c}"><b id="cv2"></b></div><div class="sl"><span>⤢</span><input type="range" id="zr" aria-label="Zoom" min="2" max="30" value="${PL.zr}"><b id="zv"></b></div><div class="row"><label><input type="checkbox" id="dv"${PL.dv?" checked":""}> show f′(x)</label><label>x = <input type="text" id="xv" aria-label="Evaluate at x" value="${esc(PL.xv)}" style="width:80px;font-size:16px"></label><b id="vo"></b></div><p id="perr" style="color:var(--bad);margin:4px 0 0" role="status"></p></div><canvas id="cv" width="640" height="440" role="img" aria-label="Graph of the function. Numbers are in the readout above."></canvas>`;plot()}
+function plot(){const cv=$("#cv");if(!cv)return;const g=cv.getContext("2d"),Wd=cv.width,H=cv.height,gv=i=>$("#"+i).value;Object.assign(PL,{fx:gv("fx"),a:+gv("a"),b:+gv("b"),c:+gv("c"),zr:+gv("zr"),dv:$("#dv").checked,xv:gv("xv")});const{a,b,c,zr:R}=PL,Ry=R*H/Wd,cs=getComputedStyle(document.documentElement);
+$("#av").textContent=a;$("#bv").textContent=b;$("#cv2").textContent=c;$("#zv").textContent=R;$("#perr").textContent="";
+const X=x=>(x+R)/(2*R)*Wd,Y=y=>H/2-y/Ry*H/2,st=Math.pow(10,Math.floor(Math.log10(R/2)));g.clearRect(0,0,Wd,H);g.strokeStyle=cs.getPropertyValue("--line");g.lineWidth=1;
+for(let x=Math.ceil(-R/st)*st;x<=R;x+=st){g.beginPath();g.moveTo(X(x),0);g.lineTo(X(x),H);g.stroke()}for(let y=Math.ceil(-Ry/st)*st;y<=Ry;y+=st){g.beginPath();g.moveTo(0,Y(y));g.lineTo(Wd,Y(y));g.stroke()}
+g.strokeStyle=cs.getPropertyValue("--ink");g.beginPath();g.moveTo(0,Y(0));g.lineTo(Wd,Y(0));g.moveTo(X(0),0);g.lineTo(X(0),H);g.stroke();
+let f;try{f=compile(PL.fx)}catch(e){$("#perr").textContent=e.message;return}const h=1e-4,F=x=>f(x,a,b,c),D=x=>(F(x+h)-F(x-h))/(2*h),draw=(fn,col,w)=>{g.strokeStyle=col;g.lineWidth=w;g.beginPath();for(const sg of segments(fn,R,Wd,Ry))sg.forEach(([p,y],i)=>i?g.lineTo(p,Y(y)):g.moveTo(p,Y(y)));g.stroke()};
+draw(F,cs.getPropertyValue("--acc"),3);if(PL.dv)draw(D,"#e8743b",2);const x0=parseAns(PL.xv);$("#vo").textContent=isNaN(x0)?"":`f = ${+F(x0).toFixed(4)}, f′ ≈ ${+D(x0).toFixed(4)}`}
+app.addEventListener("input",e=>{if(V==="more"&&SUB==="plot")plot();else if(e.target.id==="ls"){LQ=e.target.value;libList()}});
+let LD="all",LQ="";
+function libView(){$("#sv").innerHTML=`<div class="c"><input type="search" id="ls" aria-label="Search 65 resources" placeholder="Search 65 resources…" value="${esc(LQ)}"><div class="chips" id="lc"></div><p class="mut">★ marks your personal stack. These are external links, not integrations, and I haven’t verified each one. Check any solver or AI answer yourself.</p></div><div class="c" id="ll"></div>`;libList()}
+function libList(){$("#lc").innerHTML=[["all","All"],...DEP.map((n,i)=>["ABCDEFGHIJ"[i],n])].map(([k,n])=>`<button class="ghost${LD===k?" on":""}" data-a="dep" data-k="${k}">${n}</button>`).join("");
+$("#ll").innerHTML=L.filter(x=>(LD==="all"||x[0]===LD)&&(x[1]+x[3]).toLowerCase().includes(LQ.toLowerCase())).map(x=>{const core=x[1].endsWith("*"),n=x[1].replace("*",""),u=x[2]==="-"?`https://www.youtube.com/results?search_query=${encodeURIComponent(n)}`:"https://"+x[2];return`<div class="it"><div><a href="${u}" target="_blank" rel="noopener">${esc(n)}</a>${core?'<span class="tag">core</span>':""}<div class="mut">${esc(x[3])}</div></div><button class="sb" data-a="star" data-n="${esc(n)}" aria-label="Add ${esc(n)} to my stack" aria-pressed="${!!S.stack[n]}">${S.stack[n]?"★":"☆"}</button></div>`}).join("")}
+Object.assign(GL,{dep(e){LD=e.dataset.k;libList()},star(e){const n=e.dataset.n;S.stack[n]=!S.stack[n];save();libList()}});
+function dataView(){let ia=0,ra=0;$("#sv").innerHTML=`<div class="c"><b>Your data</b><p class="mut">Everything lives only in this browser on this device. Copy a backup now and then.</p><div class="row"><button class="ghost" data-a="exp">Export backup</button><button class="ghost" data-a="imp">Import backup</button><button class="ghost" data-a="rst">Reset all</button></div><textarea id="dt" rows="5" aria-label="Backup data"></textarea><p id="dm" class="mut" role="status"></p></div><div class="c mut"><b style="color:var(--ink)">About this design</b><br>The quest map, XP, ranks, speed round and test builder borrow ideas from the public description of the “1st–12th Grade Math Problems” app: grade-by-grade levels, rewards, a test maker, mental-math games and a worked solution for every task. No code, art or problems were copied. This app has no ads, accounts or purchases.</div>`;
+const dm=t=>$("#dm").textContent=t;ACT={exp(){const t=JSON.stringify(S,null,1);$("#dt").value=t;$("#dt").select();try{navigator.clipboard.writeText(t).then(()=>dm("Copied to clipboard and shown above."),()=>dm("Copy the text above to keep it."))}catch(e){dm("Copy the text above to keep it.")}},
+imp(a){let n;try{n=norm(JSON.parse($("#dt").value))}catch(e){dm("Import failed: not valid backup text.");return}if(!ia){ia=1;a.textContent="Tap again to replace";dm(`Backup has ${n.xp} XP and ${n.cards.length} review cards. Tap again to replace current progress.`);return}S=n;save();ia=0;a.textContent="Import backup";dm("Imported.");hdr()},
+rst(a){if(!ra){ra=1;a.textContent="Tap again to erase";return}S=fresh();save();ra=0;a.textContent="Reset all";dm("Progress erased.");hdr()}}}
+go("quest");
+</script>
+</body>
+</html>

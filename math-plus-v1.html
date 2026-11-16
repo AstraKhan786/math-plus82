@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Math Plus</title>
+<style>
+:root{--bg:#f4f1e8;--card:#fbf9f3;--ink:#2b2a27;--mute:#6f6b60;--line:#8a8473;--ok:#3d7a3d;--bad:#b3402a;--acc:#2a6f8e;--fn:#b5532f;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17171a;--card:#212125;--ink:#ece9e0;--mute:#a09b8e;--line:#8d887b;--ok:#8fc08a;--bad:#ee9078;--acc:#66c3d3;--fn:#e58a62}}
+:root[data-theme="dark"]{--bg:#17171a;--card:#212125;--ink:#ece9e0;--mute:#a09b8e;--line:#8d887b;--ok:#8fc08a;--bad:#ee9078;--acc:#66c3d3;--fn:#e58a62}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+.w{max-width:900px;margin:auto;padding:0 14px 40px}
+h1{font:600 clamp(26px,6vw,38px)/1.1 Georgia,serif;margin:18px 0 2px}h1 b{color:var(--acc)}
+.sub{color:var(--mute);margin:0 0 10px}
+nav{display:flex;gap:6px;overflow-x:auto;padding:6px 0 10px;position:sticky;top:0;background:var(--bg);z-index:2}
+nav button,.b{border:1.5px solid var(--line);background:none;color:var(--ink);border-radius:999px;padding:6px 14px;font:inherit;font-size:14px;cursor:pointer;white-space:nowrap}
+nav button.on,.b.p{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+section{display:none}section.on{display:block}
+.c{background:var(--card);border-radius:14px;padding:14px;margin:0 0 10px}
+.bar{height:8px;border-radius:4px;background:color-mix(in srgb,var(--line) 30%,transparent);overflow:hidden}.bar i{display:block;height:100%;background:var(--acc)}.bar.m i{background:var(--ok)}
+h2{font:600 22px Georgia,serif;margin:4px 0 6px}h3{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--mute);margin:14px 0 6px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.row.sp{justify-content:space-between}
+.mut{color:var(--mute);font-size:14px}
+input[type=text],input[type=search]{font:inherit;font-size:18px;padding:9px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);width:100%;box-sizing:border-box}
+.q{font:20px/1.4 Georgia,serif;margin:6px 0 10px}
+.res{margin-top:10px;padding:10px;border-radius:10px;border-left:6px solid var(--ok);background:color-mix(in srgb,var(--ok) 12%,transparent)}.res.x{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 12%,transparent)}
+.res ol{margin:6px 0 0;padding-left:22px}
+.lv{display:grid;grid-template-columns:34px 1fr;gap:10px}.lv>b{font:600 26px Georgia,serif;color:var(--acc)}
+.tp{display:grid;grid-template-columns:1fr 70px auto;gap:8px;align-items:center;padding:5px 0}
+canvas{width:100%;height:auto;background:var(--card);border-radius:12px;display:block}
+.sl{display:grid;grid-template-columns:24px 1fr 44px;gap:8px;align-items:center}.sl input{width:100%}
+.it{display:flex;gap:10px;justify-content:space-between;align-items:flex-start;padding:8px 0;border-top:1px solid color-mix(in srgb,var(--line) 40%,transparent)}
+.it a{color:var(--acc);font-weight:600;text-decoration:none}.tag{font-size:11px;border:1px solid var(--acc);color:var(--acc);border-radius:6px;padding:0 5px;margin-left:6px}
+.st{background:none;border:0;font-size:22px;cursor:pointer;color:var(--fn)}
+</style>
+</head>
+<body><div class="w">
+<h1>Math<b>+</b></h1><p class="sub">Learn, practice, master. One loop: diagnose → understand → visualize → practice → test → record.</p>
+<nav id="nav"></nav>
+
+<section id="s0"><div class="c"><div class="row sp"><b>Overall mastery</b><span id="ovp" class="mut"></span></div><div class="bar"><i id="ovb"></i></div>
+<p class="mut" id="nx" style="margin:8px 0 0"></p></div><div id="lad"></div>
+<div class="c mut"><b style="color:var(--ink)">Built from</b> mastery levels (Khan Academy), a diagnostic (IXL), difficulty that adapts to your score (Alcumus), hints before answers (Brilliant), sliders (Desmos), spaced repetition (Anki), and worked steps for every answer, because Myanmar marking requires them. These copy the learning mechanics, not any product’s code.<br><br><button class="b" id="rs">Reset all progress</button></div></section>
+
+<section id="s1"><div class="c"><div class="row" id="tchips"></div></div><div class="c"><div class="row sp"><span class="mut" id="pmeta"></span><span class="mut" id="pstreak"></span></div>
+<div class="q" id="pq"></div><input type="text" id="pa" inputmode="decimal" placeholder="Your answer (e.g. 12, -3, 5/2)" autocomplete="off">
+<div class="row" style="margin-top:10px"><button class="b p" id="pc">Check</button><button class="b" id="ph">Hint</button><button class="b" id="pn">Skip</button></div><div id="pr"></div></div></section>
+
+<section id="s2"><div class="c"><div class="row sp"><b>Review queue</b><span class="mut" id="rc"></span></div><p class="mut" style="margin:4px 0">Questions you missed return after 1, 2, 4, 8, 16, 32 days as you get them right.</p>
+<div class="q" id="rq"></div><input type="text" id="ra" inputmode="decimal" placeholder="Your answer" autocomplete="off"><div class="row" style="margin-top:10px"><button class="b p" id="rk">Check</button></div><div id="rr"></div></div></section>
+
+<section id="s3"><div class="c"><label class="mut">f(x) — use * for multiply, ^ for powers; a, b, c are sliders. Functions: sin cos tan sqrt abs ln log exp, constants pi e</label>
+<input type="text" id="fx" value="a*x^2+b*x+c" autocomplete="off" spellcheck="false"><div style="height:8px"></div>
+<div class="sl"><span>a</span><input type="range" id="a" min="-5" max="5" step=".1" value="1"><b id="av">1</b></div>
+<div class="sl"><span>b</span><input type="range" id="b" min="-5" max="5" step=".1" value="0"><b id="bv">0</b></div>
+<div class="sl"><span>c</span><input type="range" id="c" min="-5" max="5" step=".1" value="-2"><b id="cv2">-2</b></div>
+<div class="sl"><span>⤢</span><input type="range" id="zr" min="2" max="30" step="1" value="10"><b id="zv">10</b></div>
+<div class="row" style="margin-top:6px"><label><input type="checkbox" id="dv"> show f′(x)</label><span class="mut">x =</span><input type="text" id="xv" value="2" style="width:80px;font-size:16px"><b id="vo"></b></div><p id="perr" class="mut" style="color:var(--bad);margin:4px 0 0"></p></div>
+<canvas id="cv" width="640" height="440"></canvas></section>
+
+<section id="s4"><div class="c"><input type="search" id="ls" placeholder="Search 65 tools…"><div class="row" id="lc" style="margin-top:8px"></div><p class="mut" style="margin:8px 0 0">★ marks the tools in your personal stack. Core six from the plan are tagged. Links are not individually verified; AI answers and solvers should be checked, especially proofs.</p></div><div class="c" id="ll"></div></section>
+</div>
+<script>
+const $=s=>document.querySelector(s),r=(a,b)=>a+Math.floor(Math.random()*(b-a+1)),pk=a=>a[r(0,a.length-1)];
+const t=(n,v)=>n?` ${n<0?"−":"+"} ${Math.abs(n)===1&&v?"":Math.abs(n)}${v}`:"";
+const C=(n,k)=>{let x=1;for(let i=1;i<=k;i++)x=x*(n-k+i)/i;return Math.round(x)};
+const TR=[[3,4,5],[5,12,13],[8,15,17],[7,24,25]];
+const LV=[["Foundations","Number sense, fractions, percentages, ratios"],["Pre-algebra","Variables, expressions, basic equations"],["Core algebra","Linear and quadratic equations, polynomials, exponents"],["Geometry & trigonometry","Angles, shapes, coordinates, similarity, sin/cos/tan"],["Advanced school maths","Functions, sequences, matrices, vectors, statistics"],["Pre-university","Calculus, limits, complex numbers, modeling"],["University maths","Linear algebra, discrete maths, differential equations, analysis"],["Mastery","Proofs, independent problem solving, research, applications"]];
+const T=[
+["pct","Percentages",0,"",d=>{const p=r(1,9)*5,N=r(2,8+4*d)*20,a=p*N/100;return[`What is ${p}% of ${N}?`,a,"Write the percentage as a fraction of 100, then multiply.",[`${p}% of ${N} = ${p}/100 × ${N}`,`= ${a}`]]}],
+["lin","Linear equations",2,"",d=>{const a=r(2,4+3*d),x=r(-9,9),b=r(-9,9),c=a*x+b;return[`Solve ${a}x${t(b,"")} = ${c}. Find x.`,x,"Move the constant to the right-hand side, then divide by the coefficient of x.",[`${a}x = ${c} − (${b}) = ${c-b}`,`x = ${c-b} ÷ ${a} = ${x}`]]}],
+["quad","Quadratic equations",2,"",d=>{const p=r(1,3+2*d),q=-r(1,3+2*d),B=-(p+q),K=p*q;return[`Find the larger root of x²${t(B,"x")}${t(K,"")} = 0.`,p,"Look for two numbers with sum b and product c, then factorize.",[`Two numbers with sum ${B} and product ${K}: ${-p} and ${-q}`,`(x − ${p})(x + ${-q}) = 0`,`x = ${p} or x = ${q}, so the larger root is ${p}`]]}],
+["rem","Remainder theorem",2,"G11 Ch 1",d=>{const a=r(1,2+d),b=r(-5,5),c=r(-6,6),e=r(-9,9),k=pk([-3,-2,-1,1,2,3]),f=a*k**3+b*k*k+c*k+e;return[`Find the remainder when f(x) = ${a}x³${t(b,"x²")}${t(c,"x")}${t(e,"")} is divided by (x ${k<0?"+":"−"} ${Math.abs(k)}).`,f,"Do not divide: substitute the root of the divisor into f.",[`By the Remainder Theorem, the remainder is f(${k})`,`f(${k}) = ${a}(${k})³ + (${b})(${k})² + (${c})(${k}) + (${e})`,`= ${f}`]]}],
+["tan","Circle tangents",3,"G11 Ch 7",d=>{const[x,y,z]=pk(TR),k=r(1,d+1);return[`P is ${z*k} cm from the centre O of a circle of radius ${x*k} cm. Find the length of a tangent segment from P to the circle.`,y*k,"The radius meets a tangent at 90°. Use Pythagoras.",[`Radius ⟂ tangent, so ∠OAP = 90°  (Theorem 7.2)`,`OP² = OA² + PA²`,`PA² = ${z*k}² − ${x*k}² = ${(z*z-x*x)*k*k}`,`PA = ${y*k}`]]}],
+["ap","Arithmetic progressions",4,"G11 Ch 4",d=>{const a=r(1,9),m=r(2,6),n=r(6,10+3*d),S=n*(2*a+(n-1)*m)/2;return[`An A.P. has first term ${a} and common difference ${m}. Find the sum of its first ${n} terms.`,S,"Use S = n/2 { 2a + (n − 1)d }.",[`S_n = n/2 {2a + (n − 1)d}`,`S_${n} = ${n}/2 {2(${a}) + (${n-1})(${m})}`,`= ${S}`]]}],
+["gp","Geometric series",4,"G11 Ch 4",d=>{const m=r(2,4+d),a=(m-1)*r(1,5),S=a*m/(m-1);return[`A G.P. has first term ${a} and common ratio 1/${m}. Find the sum to infinity.`,S,"Check |r| < 1, then use S = a/(1 − r).",[`|r| = 1/${m} < 1, so the sum to infinity exists`,`S∞ = a/(1 − r) = ${a}/(1 − 1/${m}) = ${a}/(${m-1}/${m})`,`= ${S}`]]}],
+["det","Matrices (determinant)",4,"G11 Ch 5",d=>{const a=r(-4,5+d),b=r(-5,5),c=r(-5,5),e=r(-4,5+d),D=a*e-b*c;return[`Find det A for A = ( ${a}  ${b} ; ${c}  ${e} ), written row by row.`,D,"det = (top-left × bottom-right) − (top-right × bottom-left).",[`det A = ad − bc`,`= (${a})(${e}) − (${b})(${c})`,`= ${D}`]]}],
+["vec","Vectors (magnitude)",4,"G11 Ch 9",d=>{const[x,y,z]=pk(TR),k=r(1,d),sx=pk([-1,1]),sy=pk([-1,1]),x1=r(-4,4),y1=r(-4,4),dx=sx*x*k,dy=sy*y*k;return[`Given A(${x1}, ${y1}) and B(${x1+dx}, ${y1+dy}), find |AB|.`,z*k,"Find AB = OB − OA first, then its length.",[`AB = OB − OA = (${dx}, ${dy})`,`|AB| = √(${dx}² + ${dy}²) = √${dx*dx+dy*dy}`,`= ${z*k}`]]}],
+["stat","Statistics (variance)",4,"G11 Ch 6",d=>{let v;do{v=[r(-2-d,2+d),r(-2-d,2+d),r(-2-d,2+d),r(-2-d,2+d)];v.push(-v.reduce((a,b)=>a+b))}while(Math.abs(v[4])>4+d);const m=r(8,20),ss=v.reduce((a,b)=>a+b*b,0);return[`Find the variance of ${v.map(x=>x+m).join(", ")} (to 2 decimal places).`,+(ss/5).toFixed(2),"Find the mean, then average the squared deviations.",[`Mean = ${m}`,`Deviations: ${v.join(", ")}`,`σ² = Σ(x − x̄)² / n = ${ss}/5 = ${(ss/5).toFixed(2)}`]]}],
+["binom","Binomial theorem",4,"G11 Ch 2",d=>{const n=r(4,5+d),k=r(2,3),a=r(1,3),c=C(n,k);return[`Find the coefficient of x${k===2?"²":"³"} in the expansion of (1 + ${a}x)^${n}.`,c*a**k,"General term: nCr · (ax)^r.",[`T(r+1) = ${n}C${k} (${a}x)^${k}`,`${n}C${k} = ${c}`,`Coefficient = ${c} × ${a}^${k} = ${c*a**k}`]]}],
+["der","Derivatives",5,"G11 Ch 11",d=>{const a=r(1,3),b=r(-4,4),c=r(-5,5),k=r(-2,3),v=3*a*k*k+2*b*k+c;return[`If f(x) = ${a}x³${t(b,"x²")}${t(c,"x")}, find f′(${k}).`,v,"Differentiate term by term: d/dx xⁿ = nxⁿ⁻¹.",[`f′(x) = ${3*a}x²${t(2*b,"x")}${t(c,"")}`,`f′(${k}) = ${3*a}(${k})² + (${2*b})(${k}) + (${c}) = ${v}`]]}]];
+const TM=Object.fromEntries(T.map(x=>[x[0],x]));
+const DEP=["Complete platforms","Visualization","Solvers & calculators","Textbooks & libraries","Problems & contests","Video","AI tutors","Programming","Reference","Practice & organization"];
+const L=`A|Khan Academy*|khanacademy.org/math|Structured lessons and mastery tracking
+A|CK-12|ck12.org|Free textbooks, Flexi AI tutor
+A|Brilliant|brilliant.org|Interactive problem-based learning
+A|IXL Math|ixl.com/math|Diagnostics and adaptive skill practice
+A|Mathigon|mathigon.org|Interactive textbooks
+A|Mathplanet|mathplanet.com|High-school courses
+A|Art of Problem Solving|artofproblemsolving.com|Competition problem solving
+A|Schoolhouse.world|schoolhouse.world|Free peer tutoring
+B|Desmos*|desmos.com|Graphing and activities
+B|GeoGebra*|geogebra.org|Dynamic geometry, 3D, calculus
+B|PhET|phet.colorado.edu|Interactive simulations
+B|Mathigon Polypad|mathigon.org/polypad|Digital manipulatives
+B|Wolfram Alpha*|wolframalpha.com|Computation and answer checking
+B|Wolfram Mathematica|wolfram.com/mathematica|Advanced symbolic math
+B|Math3D|math3d.org|3D visualization
+B|Desmos 3D|desmos.com/3d|3D graphing
+C|Symbolab|symbolab.com|Step-by-step algebra and calculus
+C|Mathway|mathway.com|Broad problem solving
+C|Photomath|photomath.com|Scan a problem, see steps
+C|Microsoft Math Solver|mathsolver.microsoft.com|Explanations and solving
+C|Derivative Calculator|derivative-calculator.net|Differentiation steps
+C|Integral Calculator|integral-calculator.com|Integration steps
+C|Matrix Calculator|matrixcalc.org|Matrix operations
+C|Calculator.net|calculator.net|General calculators
+D|OpenStax|openstax.org|Free textbooks, pre-algebra to calculus
+D|MIT OpenCourseWare|ocw.mit.edu|University courses
+D|Mathematics LibreTexts|math.libretexts.org|Open textbooks
+D|AIM Open Textbooks|aimath.org/textbooks|Reviewed open textbooks
+D|Open Textbook Library|open.umn.edu/opentextbooks|Open-access books
+D|Project Gutenberg|gutenberg.org|Public-domain math books
+E|Alcumus|artofproblemsolving.com/alcumus|Adaptive problem solving
+E|NRICH|nrich.maths.org|Reasoning and exploration
+E|CEMC|cemc.uwaterloo.ca|Contests and learning materials
+E|Project Euler|projecteuler.net|Math and coding challenges
+E|Brilliant problems|brilliant.org|Interactive problem solving
+E|International Math Olympiad|imo-official.org|Olympiad problems
+E|MATHCOUNTS|mathcounts.org|Competition resources
+F|3Blue1Brown*|3blue1brown.com|Deep visual intuition
+F|The Organic Chemistry Tutor|-|Step-by-step instruction
+F|Professor Leonard|-|Detailed lectures
+F|patrickJMT|-|Worked examples
+F|Eddie Woo|-|School maths explanations
+F|Math Antics|mathantics.com|Foundational concepts
+G|ChatGPT*|chatgpt.com|Socratic tutoring, custom questions
+G|Google Gemini|gemini.google.com|Multimodal explanations
+G|Claude|claude.ai|Reasoning and explanations
+G|Khanmigo|khanmigo.ai|Guided tutoring
+G|CK-12 Flexi|ck12.org|AI-assisted school learning
+H|Python|python.org|Mathematical programming
+H|Google Colab|colab.research.google.com|Browser notebooks
+H|Jupyter|jupyter.org|Interactive notebooks
+H|SymPy|sympy.org|Symbolic math in Python
+H|NumPy|numpy.org|Numerical math
+H|GNU Octave|octave.org|Numerical computation
+H|SageMath|sagemath.org|Open-source advanced math
+I|Wolfram MathWorld|mathworld.wolfram.com|Mathematical encyclopedia
+I|Encyclopedia of Mathematics|encyclopediaofmath.org|Advanced reference
+I|OEIS|oeis.org|Integer sequences
+I|MathOverflow|mathoverflow.net|Research-level questions
+I|Math Stack Exchange|math.stackexchange.com|Questions and answers
+J|Quizlet|quizlet.com|Terminology flashcards
+J|Anki|apps.ankiweb.net|Spaced repetition
+J|Notion|notion.so|Learning records and planning
+J|Xmind|xmind.app|Mind maps
+J|Overleaf|overleaf.com|Writing math in LaTeX`.split("\n").map(s=>s.split("|"));
+let S={skill:{},cards:[],stack:{},streak:0};try{S=Object.assign(S,JSON.parse(localStorage.getItem("mathplus1")||"{}"))}catch(e){}
+const save=()=>{try{localStorage.setItem("mathplus1",JSON.stringify(S))}catch(e){}};
+const sk=id=>S.skill[id]||0;
+const num=s=>{s=s.trim().replace("−","-");if(s.includes("/")){const[a,b]=s.split("/");return+a/+b}return s===""?NaN:+s};
+// tabs
+const TABS=["Ladder","Practice","Review","Plot","Library"];
+TABS.forEach((n,i)=>{const b=document.createElement("button");b.textContent=n;b.onclick=()=>tab(i);$("#nav").appendChild(b)});
+function tab(i){TABS.forEach((_,j)=>{$("#s"+j).classList.toggle("on",i===j);$("#nav").children[j].classList.toggle("on",i===j)});if(i===0)ladder();if(i===1&&!cur)next();if(i===2)review();if(i===3)plot();if(i===4)lib()}
+// ladder
+function ladder(){const ids=T.map(x=>x[0]),ov=Math.round(ids.reduce((a,i)=>a+sk(i),0)/ids.length);$("#ovp").textContent=ov+"%";$("#ovb").style.width=ov+"%";
+const w=T.filter(x=>sk(x[0])<80).sort((a,b)=>a[2]-b[2]||sk(a[0])-sk(b[0]))[0];$("#nx").textContent=w?`Next up: ${w[1]} (level ${w[2]}) — ${sk(w[0])?"keep going":"start with the diagnostic"}.`:"Every available topic is mastered.";
+$("#lad").innerHTML=LV.map(([n,d],i)=>{const ts=T.filter(x=>x[2]===i);return`<div class="c lv"><b>${i}</b><div><b>${n}</b><div class="mut">${d}</div>`+(ts.length?ts.map(x=>`<div class="tp"><span>${x[1]}<span class="mut"> ${x[3]}</span></span><div class="bar${sk(x[0])>=80?" m":""}"><i style="width:${sk(x[0])}%"></i></div><button class="b" data-t="${x[0]}">${sk(x[0])>=80?"✓ Review":"Practice"}</button></div>`).join(""):`<div class="mut" style="margin-top:6px">${i<6?"No practice generators yet.":"Use the Library: OpenStax, MIT OCW, and the Map of Mathematics roadmap."}</div>`)+`</div></div>`}).join("")}
+$("#lad").onclick=e=>{const b=e.target.closest("[data-t]");if(b){mode=b.dataset.t;tab(1);next()}};
+let rsA=0;$("#rs").onclick=function(){if(!rsA){rsA=1;this.textContent="Tap again to erase all progress";return}S={skill:{},cards:[],stack:S.stack,streak:0};save();rsA=0;this.textContent="Reset all progress";ladder()};
+// practice
+let mode="mix",cur=null,q=[];
+function chips(){const el=$("#tchips");el.innerHTML="";[["mix","Mixed"],["diag","Diagnostic"],...T.map(x=>[x[0],x[1]])].forEach(([id,n])=>{const b=document.createElement("button");b.className="b"+(mode===id?" p":"");b.textContent=n;b.onclick=()=>{mode=id;q=[];next()};el.appendChild(b)})}
+function next(){chips();let id;if(mode==="diag"){if(!q.length)q=T.map(x=>x[0]).sort(()=>Math.random()-.5);id=q.shift()}else if(mode==="mix"){const w=T.map(x=>100-sk(x[0])+10),s=w.reduce((a,b)=>a+b);let z=Math.random()*s;id=T[0][0];for(let i=0;i<T.length;i++){z-=w[i];if(z<=0){id=T[i][0];break}}}else id=mode;
+const d=1+Math.min(2,Math.floor(sk(id)/34)),[qq,ans,hint,steps]=TM[id][4](d);cur={id,qq,ans,hint,steps,hinted:false,done:false,d};
+$("#pq").textContent=qq;$("#pa").value="";$("#pr").innerHTML="";$("#pc").textContent="Check";$("#pmeta").textContent=`${TM[id][1]} · difficulty ${d}/3${mode==="diag"?" · diagnostic":""}`;$("#pstreak").textContent=`streak ${S.streak}`}
+function check(){if(cur.done){if(mode==="diag"&&!q.length){mode="mix";$("#pr").innerHTML=`<div class="res"><b>Diagnostic complete.</b> Your starting levels are set; see the Ladder.</div>`;cur=null;$("#pc").textContent="Start practising";return}next();return}
+const v=num($("#pa").value);if(isNaN(v)){$("#pr").innerHTML=`<div class="res x">Enter a number or a fraction like 5/2.</div>`;return}
+const tol=cur.id==="stat"?.0101:1e-6,ok=Math.abs(v-cur.ans)<=tol;cur.done=true;
+if(mode==="diag")S.skill[cur.id]=ok?(cur.hinted?35:50):10;else S.skill[cur.id]=Math.max(0,Math.min(100,sk(cur.id)+(ok?(cur.hinted?5:10):-6)));
+S.streak=ok?S.streak+1:0;if(!ok){S.cards.push({id:cur.id,q:cur.qq,a:cur.ans,s:cur.steps,due:Date.now()+864e5,box:0});S.cards=S.cards.slice(-200)}save();
+$("#pr").innerHTML=`<div class="res${ok?"":" x"}"><b>${ok?"✓ Correct":"✗ Not quite. Answer: "+cur.ans}</b><ol>${cur.steps.map(s=>`<li>${s}</li>`).join("")}</ol><div class="mut">${ok?"":"Added to your review queue."}</div></div>`;$("#pc").textContent="Next";$("#pstreak").textContent=`streak ${S.streak}`}
+$("#pc").onclick=()=>{if(!cur){next();return}check()};$("#pa").onkeydown=e=>{if(e.key==="Enter"&&cur)check()};
+$("#ph").onclick=()=>{if(cur&&!cur.done){cur.hinted=true;$("#pr").innerHTML=`<div class="res"><b>Hint:</b> ${cur.hint}<div class="mut">Hints halve your score gain.</div></div>`}};
+$("#pn").onclick=()=>next();
+// review
+let rc=null;function review(){const due=S.cards.filter(c=>c.due<=Date.now());$("#rc").textContent=`${due.length} due · ${S.cards.length} saved`;rc=due[0]||null;$("#rr").innerHTML="";$("#ra").value="";$("#rk").textContent="Check";$("#rq").textContent=rc?rc.q:S.cards.length?"Nothing due. Come back later.":"No cards yet. Missed practice questions appear here."}
+$("#rk").onclick=()=>{if(!rc){return}if($("#rk").textContent==="Next"){review();return}const v=num($("#ra").value);if(isNaN(v))return;const ok=Math.abs(v-rc.a)<=.0101;
+rc.box=ok?Math.min(5,rc.box+1):0;rc.due=Date.now()+[1,2,4,8,16,32][rc.box]*864e5;save();$("#rr").innerHTML=`<div class="res${ok?"":" x"}"><b>${ok?"✓ Correct":"✗ Answer: "+rc.a}</b><ol>${rc.s.map(s=>`<li>${s}</li>`).join("")}</ol></div>`;$("#rk").textContent="Next"};
+// plot
+const ALW=new Set("x a b c sin cos tan sqrt abs exp ln log pi e".split(" ")),M={sin:"Math.sin",cos:"Math.cos",tan:"Math.tan",sqrt:"Math.sqrt",abs:"Math.abs",exp:"Math.exp",ln:"Math.log",log:"Math.log10",pi:"Math.PI",e:"Math.E"};
+function comp(s){if(!/^[0-9a-z\s+\-*/^().,]*$/i.test(s))throw"Unsupported character";(s.match(/[a-z]+/gi)||[]).forEach(w=>{if(!ALW.has(w))throw"Unknown name: "+w});
+s=s.replace(/(\d)\s*([xabc(])/g,"$1*$2").replace(/\^/g,"**").replace(/[a-z]+/gi,w=>M[w]||w);return new Function("x","a","b","c","return "+s)}
+function plot(){const cv=$("#cv"),g=cv.getContext("2d"),W=cv.width,H=cv.height,R=+$("#zr").value,Ry=R*H/W,[a,b,c]=["a","b","c"].map(i=>+$("#"+i).value),cs=getComputedStyle(document.documentElement);
+$("#av").textContent=a;$("#bv").textContent=b;$("#cv2").textContent=c;$("#zv").textContent=R;$("#perr").textContent="";
+const X=x=>(x+R)/(2*R)*W,Y=y=>H/2-y/Ry*H/2,ink=cs.getPropertyValue("--ink"),ln=cs.getPropertyValue("--line"),st=Math.pow(10,Math.floor(Math.log10(R/2)));
+g.clearRect(0,0,W,H);g.lineWidth=1;g.strokeStyle=ln;g.globalAlpha=.25;for(let x=Math.ceil(-R/st)*st;x<=R;x+=st){g.beginPath();g.moveTo(X(x),0);g.lineTo(X(x),H);g.stroke()}for(let y=Math.ceil(-Ry/st)*st;y<=Ry;y+=st){g.beginPath();g.moveTo(0,Y(y));g.lineTo(W,Y(y));g.stroke()}
+g.globalAlpha=1;g.strokeStyle=ink;g.beginPath();g.moveTo(0,Y(0));g.lineTo(W,Y(0));g.moveTo(X(0),0);g.lineTo(X(0),H);g.stroke();
+let f;try{f=comp($("#fx").value)}catch(e){$("#perr").textContent=String(e).replace(/^Error: /,"");return}
+const dv=$("#dv").checked,h=1e-4,F=x=>f(x,a,b,c),D=x=>(F(x+h)-F(x-h))/(2*h);
+const draw=(fn,col,w)=>{g.strokeStyle=col;g.lineWidth=w;g.beginPath();let pen=false;for(let p=0;p<=W;p+=2){const x=-R+2*R*p/W,y=fn(x);if(!isFinite(y)||Math.abs(y)>1e4){pen=false;continue}pen?g.lineTo(p,Y(y)):g.moveTo(p,Y(y));pen=true}g.stroke()};
+try{draw(F,cs.getPropertyValue("--acc"),3);if(dv)draw(D,cs.getPropertyValue("--fn"),2);const x0=num($("#xv").value);$("#vo").textContent=isNaN(x0)?"":`f = ${+F(x0).toFixed(4)}, f′ ≈ ${+D(x0).toFixed(4)}`}catch(e){$("#perr").textContent="Could not evaluate"}}
+["fx","a","b","c","zr","dv","xv"].forEach(i=>$("#"+i).addEventListener("input",plot));
+// library
+let ld="all";function lib(){const q=$("#ls").value.toLowerCase(),el=$("#lc");el.innerHTML="";[["all","All"],...DEP.map((n,i)=>["ABCDEFGHIJ"[i],n])].forEach(([k,n])=>{const b=document.createElement("button");b.className="b"+(ld===k?" p":"");b.textContent=n;b.onclick=()=>{ld=k;lib()};el.appendChild(b)});
+$("#ll").innerHTML=L.filter(x=>(ld==="all"||x[0]===ld)&&(x[1]+x[3]).toLowerCase().includes(q)).map(x=>{const core=x[1].endsWith("*"),n=x[1].replace("*",""),u=x[2]==="-"?`https://www.youtube.com/results?search_query=${encodeURIComponent(n)}`:"https://"+x[2];
+return`<div class="it"><div><a href="${u}" target="_blank" rel="noopener">${n}</a>${core?'<span class="tag">core</span>':""}<div class="mut">${x[3]}</div></div><button class="st" data-n="${n}" aria-label="Toggle in my stack">${S.stack[n]?"★":"☆"}</button></div>`}).join("")}
+$("#ls").oninput=lib;$("#ll").onclick=e=>{const b=e.target.closest("[data-n]");if(b){S.stack[b.dataset.n]=!S.stack[b.dataset.n];save();lib()}};
+tab(0);
+</script>
+</body>
+</html>
